@@ -105,35 +105,46 @@ class TicketView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
-    @discord.ui.button(label="Contact support", style=discord.ButtonStyle.blurple, custom_id="contact_support")
-    async def contact_support(self, interaction: discord.Interaction, button: discord.ui.Button):
-        guild = interaction.guild
-        user = interaction.user
-        staff_role = guild.get_role(STAFF_ROLE_ID)
-        ticket_number = get_next_ticket_number()
-        channel_name = f"ticket#{ticket_number}"
-
-        overwrites = {
-            guild.default_role: discord.PermissionOverwrite(view_channel=False),
-            user: discord.PermissionOverwrite(view_channel=True, send_messages=True, read_message_history=True),
-            staff_role: discord.PermissionOverwrite(view_channel=True, send_messages=True, read_message_history=True),
-            guild.me: discord.PermissionOverwrite(view_channel=True, send_messages=True, read_message_history=True)
-        }
-
-        category = guild.get_channel(TICKET_CATEGORY_ID) if TICKET_CATEGORY_ID else None
-        channel = await guild.create_text_channel(
-            name=channel_name,
-            overwrites=overwrites,
-            category=category,
-            reason=f"Ticket created by {user}"
-        )
-
-        await channel.send(
-            f"{user.mention} Twój ticket został utworzony! {staff_role.mention} pomoże Ci wkrótce."
-        )
+@discord.ui.button(label="Contact support", style=discord.ButtonStyle.blurple, custom_id="contact_support")
+async def contact_support(self, interaction: discord.Interaction, button: discord.ui.Button):
+    guild = interaction.guild
+    user = interaction.user
+    staff_role = guild.get_role(STAFF_ROLE_ID)
+    if staff_role is None:
         await interaction.response.send_message(
-            f"Stworzono kanał: {channel.mention}", ephemeral=True
+            "Nie znaleziono roli NextGame Staff. Skontaktuj się z administratorem.", ephemeral=True
         )
+        return
+    if user is None or guild.me is None:
+        await interaction.response.send_message(
+            "Wystąpił problem z uprawnieniami bota lub użytkownika.", ephemeral=True
+        )
+        return
+
+    ticket_number = get_next_ticket_number()
+    channel_name = f"ticket#{ticket_number}"
+
+    overwrites = {
+        guild.default_role: discord.PermissionOverwrite(view_channel=False),
+        user: discord.PermissionOverwrite(view_channel=True, send_messages=True, read_message_history=True),
+        staff_role: discord.PermissionOverwrite(view_channel=True, send_messages=True, read_message_history=True),
+        guild.me: discord.PermissionOverwrite(view_channel=True, send_messages=True, read_message_history=True)
+    }
+
+    category = guild.get_channel(TICKET_CATEGORY_ID) if TICKET_CATEGORY_ID else None
+    channel = await guild.create_text_channel(
+        name=channel_name,
+        overwrites=overwrites,
+        category=category,
+        reason=f"Ticket created by {user}"
+    )
+
+    await channel.send(
+        f"{user.mention} Twój ticket został utworzony! {staff_role.mention} pomoże Ci wkrótce."
+    )
+    await interaction.response.send_message(
+        f"Stworzono kanał: {channel.mention}", ephemeral=True
+    )
 
 # === KOMENDA /ticket-channel DLA ADMINA ===
 @bot.tree.command(
