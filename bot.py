@@ -3,11 +3,7 @@ from discord.ext import tasks, commands
 import requests
 
 from keep_alive import keep_alive
-
-FACEIT_API_KEY = 'a6f20d43-f934-4e5c-b348-42cf6e732dda'
-ORGANIZER_ID = '599b0f48-50be-46f2-a80e-068148dbf6c0'
-DISCORD_TOKEN = 'MTM5MDA3OTE5NzY0MDM5Mjg1NQ.Gk29JH.zXxZFBUDHU1eeRwbN1mPc_hv1YibE8YIXZcVbQ'  
-CHANNEL_ID = 1389255740014727420           
+      
 
 intents = discord.Intents.default()
 bot = commands.Bot(command_prefix="!", intents=intents)
