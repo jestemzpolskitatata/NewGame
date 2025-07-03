@@ -21,12 +21,12 @@ def keep_alive():
     t.start()
 
 # === KONFIGURACJA ===
-DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
-CHANNEL_ID = int(os.environ.get("CHANNEL_ID")
-GUILD_ID = int(os.environ.get("GUILD_ID")
-STAFF_ROLE_ID = int(os.environ.get("STAFF_ROLE_ID")
-TICKET_CATEGORY_ID = int(os.environ.get("TICKET_CATEGORY_ID")
-FACEIT_API_KEY = os.environ.get("FACEIT_API_KEY")
+DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
+CHANNEL_ID = int(os.getenv("CHANNEL_ID")
+GUILD_ID = int(os.getenv("GUILD_ID")
+STAFF_ROLE_ID = int(os.getenv("STAFF_ROLE_ID")
+TICKET_CATEGORY_ID = int(os.getenv("TICKET_CATEGORY_ID")
+FACEIT_API_KEY = os.getenv("FACEIT_API_KEY")
 ORGANIZER_ID = "599b0f48-50be-46f2-a80e-068148dbf6c0"
 
 # === BOT ===
