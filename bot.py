@@ -148,7 +148,7 @@ async def ticket_channel(interaction: discord.Interaction):
         description="Please use the button below if you wish to open a ticket!",
         color=discord.Color.orange()
     )
-    embed.set_footer(text="CSCL | Support")
+    embed.set_footer(text="NextGame | Support")
     await interaction.channel.send(embed=embed, view=TicketView())
     await interaction.response.send_message("Panel ticketów wysłany!", ephemeral=True)
 
